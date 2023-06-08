@@ -27,9 +27,9 @@ find_package(PCL)
 #add_executable(02resampling 02resampling.cpp)
 #target_link_libraries(02resampling ${PCL_LIBRARIES})
 
-#add_executable(03moment_of_inertia 03moment_of_inertia.cpp)
-#target_link_libraries(03moment_of_inertia ${PCL_LIBRARIES})
+add_executable(03moment_of_inertia 03moment_of_inertia.cpp)
+target_link_libraries(03moment_of_inertia ${PCL_LIBRARIES})
 
-add_executable(04pc_template_match 04pc_template_match.cpp)
-target_link_libraries(04pc_template_match ${PCL_LIBRARIES})
+# add_executable(04pc_template_match 04pc_template_match.cpp)
+# target_link_libraries(04pc_template_match ${PCL_LIBRARIES})
 

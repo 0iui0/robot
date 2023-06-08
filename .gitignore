@@ -1,8 +1,8 @@
 *.pyc
-
+09_3d_cv/04pcl_application/cmake-build-debug/
 # 忽略工程中所有的 .idea 文件夹，及其下面的文件
 .idea 
 
 # 忽略 .catkin_workspace 这个文件
 .catkin_workspace
-
+09_3d_cv/04pcl_application/build/Debug/bin/

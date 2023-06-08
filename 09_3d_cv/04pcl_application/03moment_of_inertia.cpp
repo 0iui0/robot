@@ -13,6 +13,7 @@
 #include <pcl/point_types.h>
 #include <pcl/features/moment_of_inertia_estimation.h>
 #include <pcl/visualization/cloud_viewer.h>
+#include <pcl/io/pcd_io.h>
 
 using namespace std::chrono_literals;
 
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     if (pcl::io::loadPCDFile(argv[1], *cloud) == -1)
         return (-1);
-
+    pcl::io::savePCDFileASCII("/home/an/robot/09_3d_cv/04pcl_application/test_pcd.pcd", *cloud);
     // 创建惯性矩估算对象，设置输入点云，并进行计算
     pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
     feature_extractor.setInputCloud(cloud);
@@ -95,7 +96,7 @@ int main(int argc, char **argv) {
     viewer->addLine(center, z_axis, 0.0f, 0.0f, 1.0f, "minor eigen vector");
 
     while (!viewer->wasStopped()) {
-        viewer->spinOnce(100);
+        viewer->spin();
         std::this_thread::sleep_for(100ms);
     }
 

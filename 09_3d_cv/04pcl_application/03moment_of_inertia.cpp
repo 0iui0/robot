@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     if (pcl::io::loadPCDFile(argv[1], *cloud) == -1)
         return (-1);
-    pcl::io::savePCDFileASCII("/home/an/robot/09_3d_cv/04pcl_application/test_pcd.pcd", *cloud);
+    pcl::io::savePCDFileASCII("~/robot/09_3d_cv/04pcl_application/test_pcd.pcd", *cloud);
     // 创建惯性矩估算对象，设置输入点云，并进行计算
     pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
     feature_extractor.setInputCloud(cloud);

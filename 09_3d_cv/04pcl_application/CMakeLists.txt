@@ -12,7 +12,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${OUTPUT_DIRECTORY_ROOT}/lib" CACHE PATH "Li
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${OUTPUT_DIRECTORY_ROOT}/lib" CACHE PATH "Archive directory" FORCE)
 # =========================
 
-set(PCL_DIR ~/3rdparty/pcl-1.9.1/share/pcl-1.9)
+set(PCL_DIR ~/miniconda3/envs/ros_env/share/pcl-1.12)
 find_package(PCL)
 
 #add_executable(01planar_segmentation 01pc_segmentation/01planar_segmentation.cpp)
@@ -27,7 +27,7 @@ find_package(PCL)
 #add_executable(02resampling 02resampling.cpp)
 #target_link_libraries(02resampling ${PCL_LIBRARIES})
 
-add_executable(03moment_of_inertia 03moment_of_inertia.cpp)
+add_executable(03moment_of_inertia bounding_box.cpp 03moment_of_inertia.cpp )
 target_link_libraries(03moment_of_inertia ${PCL_LIBRARIES})
 
 # add_executable(04pc_template_match 04pc_template_match.cpp)

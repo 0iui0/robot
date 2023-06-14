@@ -5,8 +5,6 @@
 #include <Eigen/Geometry>
 #include <iostream>
 
-namespace spark_dsg {
-
 template <typename PointT>
 PointT getRotatedPoint(const Eigen::Matrix3f& new_R_old,
                        const Eigen::Vector3f& new_t_old,
@@ -211,5 +209,3 @@ BoundingBox extractRAABBBox(const pcl::MomentOfInertiaEstimation<PointT>& estima
   return BoundingBox(
       BoundingBox::Type::RAABB, min, max, old_t_new, new_R_old.transpose());
 }
-
-}  // namespace spark_dsg

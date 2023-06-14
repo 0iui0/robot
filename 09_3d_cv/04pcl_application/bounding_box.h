@@ -88,6 +88,9 @@ struct BoundingBox {
   Eigen::Vector3f world_P_center;
   //! world orientation (only for OBB)
   Eigen::Matrix3f world_R_center;
+  Eigen::Vector3f mass_center;
+  Eigen::Vector3f major_vector, middle_vector, minor_vector;
+  float major_value, middle_value, minor_value;
 
   /**
    * @brief output bounding box information
@@ -127,6 +130,10 @@ struct BoundingBox {
     Eigen::Matrix3f pcl_rotation;
     BoundingBox box;
     box.type = type;
+    estimator.getEigenValues(box.major_value, box.middle_value, box.minor_value);
+    estimator.getEigenVectors(box.major_vector, box.middle_vector, box.minor_vector);
+    estimator.getMassCenter(box.mass_center);
+
     // TODO(nathan) consider using constructors
     switch (type) {
       case Type::AABB:

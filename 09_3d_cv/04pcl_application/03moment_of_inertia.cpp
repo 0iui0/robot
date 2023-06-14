@@ -43,28 +43,17 @@ int main(int argc, char **argv) {
     viewer->setShapeRenderingProperties(pcl::visualization::PCL_VISUALIZER_REPRESENTATION,
                                         pcl::visualization::PCL_VISUALIZER_REPRESENTATION_WIREFRAME, "OBB");
 
-
-    // 创建惯性矩估算对象，设置输入点云，并进行计算
-    pcl::MomentOfInertiaEstimation<pcl::PointXYZ> feature_extractor;
-    feature_extractor.setInputCloud(cloud);
-    feature_extractor.compute();
-    Eigen::Vector3f major_vector, middle_vector, minor_vector;
-    // 获取主轴major_vector，中轴middle_vector，辅助轴minor_vector
-    feature_extractor.getEigenVectors(major_vector, middle_vector, minor_vector);
-    pcl::PointXYZ center(box.world_P_center(0), box.world_P_center(1), box.world_P_center(2));
-    pcl::PointXYZ x_axis(major_vector(0) + box.world_P_center(0), major_vector(1) + box.world_P_center(1),
-                         major_vector(2) + box.world_P_center(2));
-    pcl::PointXYZ y_axis(middle_vector(0) + box.world_P_center(0), middle_vector(1) + box.world_P_center(1),
-                         middle_vector(2) + box.world_P_center(2));
-    pcl::PointXYZ z_axis(minor_vector(0) + box.world_P_center(0), minor_vector(1) + box.world_P_center(1),
-                         minor_vector(2) + box.world_P_center(2));
+    pcl::PointXYZ center(box.mass_center(0), box.mass_center(1), box.mass_center(2));
+    pcl::PointXYZ x_axis(box.major_vector(0) + box.world_P_center(0), box.major_vector(1) + box.world_P_center(1),
+                         box.major_vector(2) + box.world_P_center(2));
+    pcl::PointXYZ y_axis(box.middle_vector(0) + box.world_P_center(0), box.middle_vector(1) + box.world_P_center(1),
+                         box.middle_vector(2) + box.world_P_center(2));
+    pcl::PointXYZ z_axis(box.minor_vector(0) + box.world_P_center(0), box.minor_vector(1) + box.world_P_center(1),
+                         box.minor_vector(2) + box.world_P_center(2));
     viewer->addLine(center, x_axis, 1.0f, 0.0f, 0.0f, "major eigen vector");
     viewer->addLine(center, y_axis, 0.0f, 1.0f, 0.0f, "middle eigen vector");
     viewer->addLine(center, z_axis, 0.0f, 0.0f, 1.0f, "minor eigen vector");
 
-    viewer->addLine(pcl::PointXYZ(box2.world_P_center.x(),box2.world_P_center.y(),box2.world_P_center.z()),x_axis, 1.0f, 0.0f, 0.0f);
-    viewer->addLine(pcl::PointXYZ(box2.world_P_center.x(),box2.world_P_center.y(),box2.world_P_center.z()),y_axis, 0.0f, 1.0f, 0.0f);
-    viewer->addLine(pcl::PointXYZ(box2.world_P_center.x(),box2.world_P_center.y(),box2.world_P_center.z()),z_axis, 0.0f, 0.0f, 1.0f);
     while (!viewer->wasStopped()) {
         viewer->spin();
         std::this_thread::sleep_for(100ms);

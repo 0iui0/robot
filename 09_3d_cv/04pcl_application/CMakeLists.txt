@@ -33,3 +33,11 @@ target_link_libraries(03moment_of_inertia ${PCL_LIBRARIES})
 # add_executable(04pc_template_match 04pc_template_match.cpp)
 # target_link_libraries(04pc_template_match ${PCL_LIBRARIES})
 
+add_executable(narf_keypoint_extraction  narf_keypoint_extraction.cpp )
+target_link_libraries(narf_keypoint_extraction ${PCL_LIBRARIES})
+
+add_executable(harris3d_keypoint_extraction  harris3d_keypoint_extraction.cpp )
+target_link_libraries(harris3d_keypoint_extraction ${PCL_LIBRARIES})
+
+add_executable(iss_keypoint_extraction  iss_keypoint_extraction.cpp )
+target_link_libraries(iss_keypoint_extraction ${PCL_LIBRARIES})

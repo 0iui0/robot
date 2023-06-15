@@ -1,6 +1,12 @@
 #pragma once
 #define PCL_NO_PRECOMPILE
 #include <pcl/features/moment_of_inertia_estimation.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/features/fpfh.h>
+#include <pcl/keypoints/iss_3d.h>
+#include <pcl/visualization/pcl_visualizer.h>
 #undef PCL_NO_PRECOMPILE
 #include <Eigen/Geometry>
 #include <iostream>
@@ -91,6 +97,7 @@ struct BoundingBox {
   Eigen::Vector3f mass_center;
   Eigen::Vector3f major_vector, middle_vector, minor_vector;
   float major_value, middle_value, minor_value;
+  Eigen::Vector3f keypoint0;
 
   /**
    * @brief output bounding box information
@@ -124,6 +131,27 @@ struct BoundingBox {
     }
     estimator.compute();
 
+    // 1.Compute surface normals
+    pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>);
+    pcl::search::KdTree<pcl::PointXYZ>::Ptr tree(new pcl::search::KdTree<PointT>);
+    pcl::NormalEstimation<PointT, pcl::Normal> ne;
+    ne.setInputCloud(cloud);
+    ne.setSearchMethod(tree);
+    ne.setRadiusSearch(0.03);
+    ne.compute(*normals);
+
+    // 2.Compute ISS keypoints
+    pcl::PointCloud<pcl::PointXYZ>::Ptr  keypoints(new pcl::PointCloud<PointT>);
+    pcl::ISSKeypoint3D<PointT, PointT> iss;
+    iss.setInputCloud(cloud);
+    iss.setNormals(normals);
+    iss.setSalientRadius(6 * ne.getRadiusSearch());
+    iss.setNonMaxRadius(4 * ne.getRadiusSearch());
+    iss.setThreshold21(0.975);
+    iss.setThreshold32(0.975);
+    iss.setMinNeighbors(5);
+    iss.compute(*keypoints);
+
     PointT pcl_min;
     PointT pcl_max;
     PointT pcl_position;
@@ -133,7 +161,11 @@ struct BoundingBox {
     estimator.getEigenValues(box.major_value, box.middle_value, box.minor_value);
     estimator.getEigenVectors(box.major_vector, box.middle_vector, box.minor_vector);
     estimator.getMassCenter(box.mass_center);
-
+    if (!keypoints->empty()) {
+      box.keypoint0.x() = keypoints->front().x;
+      box.keypoint0.y() = keypoints->front().y;
+      box.keypoint0.z() = keypoints->front().z;
+    }
     // TODO(nathan) consider using constructors
     switch (type) {
       case Type::AABB:
